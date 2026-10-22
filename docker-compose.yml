@@ -1,0 +1,15 @@
+services:
+  postgres-service:
+    image: postgres:17
+    container_name: postgres-service
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: cadastro_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - cadastro-data:/var/lib/postgresql/data
+
+volumes:
+  cadastro-data:
