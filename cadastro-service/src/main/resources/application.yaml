@@ -1,3 +1,13 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: cadastro-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/cadastro_db
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
