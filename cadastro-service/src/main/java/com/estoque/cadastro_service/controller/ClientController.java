@@ -1,6 +1,7 @@
 package com.estoque.cadastro_service.controller;
 
 import com.estoque.cadastro_service.dto.ClientRequestDto;
+import com.estoque.cadastro_service.dto.ClientRequestUpdateDto;
 import com.estoque.cadastro_service.dto.ClientResponseDto;
 import com.estoque.cadastro_service.service.ClientService;
 import jakarta.validation.Valid;
@@ -39,5 +40,14 @@ public class ClientController {
             @PageableDefault(page = 0, size = 10, sort = "name")Pageable pageable){
         Page<ClientResponseDto> response = clientService.findAll(search, pageable);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientResponseDto> update(
+            @PathVariable UUID id, @Valid @RequestBody ClientRequestUpdateDto dto){
+        ClientResponseDto client = clientService.update(id, dto);
+        return ResponseEntity.ok(client);
+
+
     }
 }

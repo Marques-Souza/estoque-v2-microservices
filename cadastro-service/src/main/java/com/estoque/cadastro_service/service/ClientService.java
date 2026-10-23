@@ -1,6 +1,7 @@
 package com.estoque.cadastro_service.service;
 
 import com.estoque.cadastro_service.dto.ClientRequestDto;
+import com.estoque.cadastro_service.dto.ClientRequestUpdateDto;
 import com.estoque.cadastro_service.dto.ClientResponseDto;
 import com.estoque.cadastro_service.exception.ClientAlreadyExistsException;
 import com.estoque.cadastro_service.exception.ClientNotFoundException;
@@ -53,6 +54,15 @@ public class ClientService {
             clients = clientRepository.findBySearch(search, pageable);
         }
         return clients.map(clientMapper::toResponse);
+    }
+
+    @Transactional
+    public ClientResponseDto update(UUID id, ClientRequestUpdateDto dto){
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
+        clientMapper.updateEntity(dto, client);
+        Client saved = clientRepository.save(client);
+        return clientMapper.toResponse(saved);
     }
 
 }
