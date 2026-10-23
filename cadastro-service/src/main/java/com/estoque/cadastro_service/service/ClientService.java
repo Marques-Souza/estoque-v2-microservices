@@ -8,6 +8,8 @@ import com.estoque.cadastro_service.mapper.ClientMapper;
 import com.estoque.cadastro_service.model.Client;
 import com.estoque.cadastro_service.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,17 @@ public class ClientService {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         return  clientMapper.toResponse(client);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<ClientResponseDto> findAll(String search, Pageable pageable){
+        Page<Client> clients = clientRepository.findAll(pageable);
+
+        if (search != null && !search.isBlank()){
+            clients = clientRepository.findBySearch(search, pageable);
+        }
+        return clients.map(clientMapper::toResponse);
     }
 
 }

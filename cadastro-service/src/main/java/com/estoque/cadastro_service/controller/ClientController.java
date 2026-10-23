@@ -5,6 +5,9 @@ import com.estoque.cadastro_service.dto.ClientResponseDto;
 import com.estoque.cadastro_service.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,14 @@ public class ClientController {
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponseDto> findById(@PathVariable UUID id){
         ClientResponseDto response = clientService.findById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ClientResponseDto>> findAll(
+            @RequestHeader(value = "search", required = false) String search,
+            @PageableDefault(page = 0, size = 10, sort = "name")Pageable pageable){
+        Page<ClientResponseDto> response = clientService.findAll(search, pageable);
         return ResponseEntity.ok(response);
     }
 }
